@@ -20,7 +20,7 @@ jobs:
          docker_layer_caching: true
 
      # build the application image
-     - run: docker build . --file index.js --tag docker.pkg.github.com/${{ github.repository }}/node-hello:$GITHUB_SHA
+     - run: docker build . --file Dockerfile --tag docker.pkg.github.com/${{ github.repository }}/node-hello:$GITHUB_SHA
 
      # docker login
      - run: docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
