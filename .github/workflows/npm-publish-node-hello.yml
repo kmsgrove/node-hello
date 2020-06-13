@@ -17,7 +17,9 @@ jobs:
       run: docker build . --file Dockerfile --tag docker.pkg.github.com/leevan0610/node-hello/node-hello:$GITHUB_SHA
     - name: Login to Registry
       run: docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-    - name: authenticate
-      run: cat ${{ secrets.GITHUB }} | docker login docker.pkg.github.com -u LeeVan0610 --password-stdin
+    - name: login
+      run: echo ${GITHUB_TOKEN} | docker login -u LeeVan0610 --password-stdin docker.pkg.github.com
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB }}
     - name: Publish to Registry
       run: docker push docker.pkg.github.com/leevan0610/node-hello/node-hello:$GITHUB_SHA
