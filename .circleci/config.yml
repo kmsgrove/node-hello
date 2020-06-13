@@ -1,0 +1,29 @@
+n# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+# Use a package of configuration called an orb.
+orbs:
+  # Declare a dependency on the welcome-orb
+  welcome: circleci/welcome-orb@0.4.1
+on:
+  push:
+    branches:    
+    - 'release/**'
+# Orchestrate or schedule a set of jobs
+jobs:
+ build:
+   machine: true
+   docker:
+      - image: circleci/golang:1.13-alpine
+   steps:
+     - checkout
+     - setup_remote_docker:
+         docker_layer_caching: true
+
+     # build the application image
+     - run: docker build . --file Dockerfile --tag docker.pkg.github.com/${{ github.repository }}/node-hello:$GITHUB_SHA
+
+     # docker login
+     - run: docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+     # deploy the image
+     - run: docker push docker.pkg.github.com/${{ github.repository }}/node-hello:$GITHUB_SHA
+
