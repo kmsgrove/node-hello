@@ -13,7 +13,7 @@ jobs:
  
     steps:
     - name: Build the Docker image
-      run: docker build . 
+      run: docker build . --file Dockerfile -t node-hello:$GITHUB_SHA
     - name: Login to Registry
       run: docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
     - name: Publish to Registry
